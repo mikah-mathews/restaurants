@@ -17,12 +17,12 @@ namespace Restaurants.Controllers
     }
     public ActionResult Index()
     {
-      List<Restaurant> model = _db.Restaurants.ToList();
+      List<Restaurant> model = _db.Restaurants.Include(restaurant => restaurant.Cuisine).ToList();
       return View(model);
     }
     public ActionResult Create()
     {
-      
+      ViewBag.CuisineId = new SelectList(_db.Cuisines, "CuisineID", "Name");
       return View();
     }
     [HttpPost]
@@ -40,6 +40,7 @@ namespace Restaurants.Controllers
     public ActionResult Edit(int id)
     {
       Restaurant thisRestaurant = _db.Restaurants.FirstOrDefault(restaurant => restaurant.RestaurantId == id);
+      ViewBag.CuisineId = new SelectList(_db.Cuisines, "CuisineID", "Name");
       return View(thisRestaurant);
     }
     [HttpPost]
